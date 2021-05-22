@@ -1,0 +1,123 @@
+﻿@using GalerijaG3.Models
+@{
+    Layout = null;
+    ViewBag.Title = "Izmena slika";
+}
+
+<!DOCTYPE html>
+@{
+
+    <!-- INIT -->
+
+    Dictionary<string, Slika> slike = (Dictionary<string, Slika>)HttpContext.Current.Application["slike"];
+    Dictionary<string, Korisnik> korisnici = (Dictionary<string, Korisnik>)HttpContext.Current.Application["korisnici"];
+    Dictionary<string, Galerija> galerije = (Dictionary<string, Galerija>)HttpContext.Current.Application["galerije"];
+    Korisnik korisnik = (Korisnik)HttpContext.Current.Session["korisnik"];
+
+    <!-- INIT -->
+
+}
+<html>
+<head>
+    <link rel="stylesheet" href="~/Content/PrikazSlikaStyle.css">
+    <meta name="viewport" content="width=device-width" />
+</head>
+<body>
+
+    <!-- MENI -->
+
+    <ul>
+        <li><a class="active" href="~/Slike/Index">Home</a></li>
+        <li><a href="~/Login/Odjava">Odjava</a></li>
+    </ul>
+    <p class="korisnikPrikaz">
+        Administrator: @korisnik.ime @korisnik.prezime
+    </p>
+
+    <!-- MENI -->
+
+    <!-- NASLOV -->
+
+    <div class="app-title">
+        <h1>Izmena slike</h1>
+    </div>
+
+    <!-- NASLOV -->
+
+    <!-- GRESKE -->
+
+    @if (ViewBag.ErrorMessages != null && ViewBag.ErrorMessages.Count > 0)
+    {
+        foreach (string error in ViewBag.ErrorMessages)
+        {
+            <p style="color:darkred; text-align:center">
+                @error <br>
+            </p>
+        }
+    }
+    <br><br>
+
+    <!-- GRESKE -->
+
+    <!-- SLIKE -->
+
+    <form action="~/Slike/IzmeniSliku" method="post" class="login-form">
+        <table>
+            <tr>
+                <td colspan="1">
+                    <input list="dostupneSlike" name="naziv" placeholder="Dostupne slike" required />
+                    <datalist id="dostupneSlike">
+                        @{
+                            foreach (Slika s in slike.Values)
+                            {
+                                if (s.obrisana != true && s.naProdaju != false)
+                                {
+                                    <option value=@s.naziv.Replace(" ", "_")></option>
+                                }
+                            }
+                        }
+                    </datalist>
+                </td>
+                <td><input type="text" class="login-field" placeholder="Unesite ime autora" name="autor" required></td>
+            </tr>
+            <tr>
+                <td><input type="number" class="login-field" placeholder="Unesite godinu izrade" name="godinaIzrade" required></td>
+                <td><input type="text" class="login-field" placeholder="Unesite tehniku izrade" name="tehnika" required></td>
+            </tr>
+            <tr>
+                <td><input type="number" class="login-field" placeholder="Unesite cenu slike" name="cena" required></td>
+                <td><input type="text" class="login-field-double" placeholder="Unesite opis slike" name="opis" required></td>
+            </tr>
+            <tr>
+                <td>
+                    <input list="bool" name="naProdaju" placeholder="Da li je slika na prodaju" required />
+                    <datalist id="bool">
+                        <option value="TRUE"></option>
+                        <option value="FALSE"></option>
+                    </datalist>
+                </td>
+                <td>
+                    <input list="imeGalerije" name="galerija" placeholder="Galerija za izlaganje" required />
+                    <datalist id="imeGalerije">
+                        @{
+                            foreach (Galerija g in galerije.Values)
+                            {
+                                if (g.obrisana != true)
+                                {
+                                    <option value=@g.naziv></option>
+                                }
+                            }
+                        }
+                    </datalist>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2"><input type="submit" class="btn btn-primary btn-large btn-block" value="Izmeni"></td>
+            </tr>
+        </table>
+    </form>
+
+    <!-- SLIKE -->
+
+</body>
+</html>

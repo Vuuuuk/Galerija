@@ -1,0 +1,5 @@
+﻿Luvr;Pariz;false
+Akropolj;Atina;false
+Ermitaž;Sankt Petersburg;false
+Muzej;London;false
+Prado muzej;Madrid;true

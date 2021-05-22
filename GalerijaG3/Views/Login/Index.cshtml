@@ -1,0 +1,48 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = "Prijava korisnika";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <link rel="stylesheet" href="~/Content/RPStyle.css">
+    <meta name="viewport" content="width=device-width" />
+</head>
+<body>
+
+    <div class="app-title">
+        <h1>Prijava</h1>
+    </div>
+
+    <form action="~/Login/Prijava" method="post" class="login-form">
+        <table class="control-group">
+            <tr>
+                <td><input type="text" class="login-field" placeholder="Unesite vaše korisničko ime" name="korisnickoIme" required></td>
+            </tr>
+            <tr>
+                <td><input type="password" class="login-field" placeholder="Unesite vašu lozinku" name="lozinka" required></td>
+            </tr>
+            <tr>
+                <td colspan="2"><input type="submit" class="btn-login btn-primary btn-large btn-block" value="Potvrdi"></td>
+            </tr>
+        </table>
+    </form>
+
+    @if (ViewBag.ErrorMessages != "")
+    {
+        <p class="error">
+            @ViewBag.ErrorMessages
+        </p>
+    }
+
+    <p class="bottom">
+        Nemate nalog, registrujte se
+        <a href="~/Register/Index">ovde</a>
+        ili nastavite kao 
+        <a href="~/Slike/Index">gost</a>!
+    </p>
+
+</body>
+</html>

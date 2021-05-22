@@ -1,0 +1,7 @@
+﻿Admin;Admin;Vuk;Radunović;MUSKI;el.teh.it.radunovic.vuk@gmail.com;05-05-2021;ADMINISTRATOR;false
+Administrator;Administrator;Vuk;Radunović;DRUGO;hasky19@hotmail.com;05-05-2021;ADMINISTRATOR;false
+Korisnik1;Korisnik1;Dejan;Antić;MUSKI;dejan.antic@gmail.com;03-07-1997;KUPAC;false
+Korisnik2;Korisnik2;Đura;Rajković;MUSKI;djura.rajkovic@gmail.com;04-09-1995;KUPAC;false
+Korisnik3;Korisnik3;Dabiživ;Ignjatović;MUSKI;dabiziv.ignjatovic@gmail.com;03-07-1999;KUPAC;false
+Korisnik4;Korisnik4;Marko;Mandić;MUSKI;marko.madic@gmail.com;09-09-1999;KUPAC;false
+Korisnik5;Korisnik5;Slaviša;Ristovski;MUSKI;slavisa.ristovski@gmail.com;03-07-1997;KUPAC;false

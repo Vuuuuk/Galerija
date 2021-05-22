@@ -1,0 +1,101 @@
+﻿@using GalerijaG3.Models
+@{
+    Layout = null;
+    ViewBag.Title = "Pregled slika";
+}
+
+<!DOCTYPE html>
+
+@{
+
+    <!-- INIT -->
+
+    Dictionary<string, Slika> slikeGalerije = (Dictionary<string, Slika>)HttpContext.Current.Application["slikeGalerije"];
+    Korisnik korisnik = (Korisnik)HttpContext.Current.Session["korisnik"];
+
+    <!-- INIT -->
+
+}
+
+<html>
+<head>
+    <link rel="stylesheet" href="~/Content/PrikazSlikaStyle.css">
+    <meta name="viewport" content="width=device-width" />
+</head>
+<body>
+
+    <!-- MENI -->
+
+    <ul>
+        <li><a class="active" href="~/Slike/Index">Home</a></li>
+        <li><a href="~/Korpa/Index">Korpa</a></li>
+        <li><a href="~/Login/Odjava">Odjava</a></li>
+    </ul>
+    <p class="korisnikPrikaz">
+        Kupac: @korisnik.ime @korisnik.prezime
+    </p>
+
+    <!-- MENI -->
+    <!-- NASLOV -->
+
+    <div class="app-title">
+        <h1>Pregled Galerije</h1>
+    </div>
+
+    <!-- NASLOV -->
+    <!-- SLIKE -->
+    @{
+        if (slikeGalerije.Count() != 0)
+        {
+            <table>
+                <tr>
+                    <th>Naziv slike</th>
+                    <th>Autor slike</th>
+                    <th>Godina izrade</th>
+                    <th>Kratak opis</th>
+                    <th>Tehnika</th>
+                    <th>Na prodaju</th>
+                    <th>Galerija</th>
+                    <th>Kupivina</th>
+                </tr>
+                @{
+                    foreach (Slika s in slikeGalerije.Values)
+                    {
+                        if (!s.obrisana && s.naProdaju)
+                        {
+                            <tr>
+                                <td>@s.naziv</td>
+                                <td>@s.autor</td>
+                                <td>@s.godinaIzrade god.</td>
+                                <td>@s.opis</td>
+                                <td>@s.tehnika</td>
+                                <td>@s.naProdaju -> @s.cena,00 EUR</td>
+                                <td>@s.galerija</td>
+                                <td>
+                                    <form action="~/Korpa/Dodaj" method="post">
+                                        <input type="text" name="nazivSlike" value="@s.naziv" hidden>
+                                        <input type="submit" class="btn-login" value="Dodaj u korpu">
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    }
+                }
+            </table>
+        }
+        else
+        {
+            <!-- GRESKA -->
+
+            <p style="color:darkred; font-size:25px; text-align:center">
+                Galerija je prazna, molimo pokušajte kasnije!
+            </p>
+
+            <!-- GRESKA -->
+        }
+    }
+
+    <!-- SLIKE -->
+
+</body>
+</html>

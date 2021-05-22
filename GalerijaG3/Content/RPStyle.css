@@ -1,0 +1,130 @@
+﻿* {
+box-sizing: border-box;
+}
+
+*:focus 
+{
+	outline: none;
+}
+body {
+    font-family: Arial;
+    background-color: #1D1F23;
+    padding: 50px;
+}
+
+.app-title 
+{
+    text-align: center;
+    color: #777;
+}
+
+.error
+{
+    color:darkred;
+    text-align:center;
+}
+
+.login-form 
+{
+    text-align: center;
+}
+
+.login-field
+{
+    margin: 2.5px;
+}
+
+.login-field-double
+{
+    margin: 2.5px;
+    width: 510px;
+}
+
+.control-group 
+{
+    margin-bottom: 10px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+input {
+    text-align: center;
+    background-color: #ECF0F1;
+    border: 2px solid transparent;
+    border-radius: 3px;
+    font-size: 16px;
+    font-weight: 200;
+    padding: 10px 0;
+    width: 250px;
+    transition: border .5s;
+}
+
+input:focus 
+{
+    border: 2px solid #3498DB;
+    box-shadow: none;
+}
+
+.btn {
+    border: 2px solid transparent;
+    background: #777;
+    color: lightgray;
+    font-size: 16px;
+    line-height: 25px;
+    padding: 10px 0;
+    text-decoration: none;
+    text-shadow: none;
+    border-radius: 3px;
+    box-shadow: none;
+    transition: 0.25s;
+    display: block;
+    width: 250px;
+    margin: 10px auto;
+}
+
+.btn-login {
+    border: 2px solid transparent;
+    background: #777;
+    color: lightgray;
+    font-size: 16px;
+    line-height: 25px;
+    padding: 10px 0;
+    text-decoration: none;
+    text-shadow: none;
+    border-radius: 3px;
+    box-shadow: none;
+    transition: 0.25s;
+    display: block;
+    width: 125px;
+    margin: 10px auto;
+}
+
+.bottom {
+    position: fixed;
+    bottom: 0;
+    width: 93%;
+    text-align:center;
+    color: #777777;
+}
+
+a:link {
+    text-decoration: none;
+    color: whitesmoke;
+}
+
+a:hover {
+    color: none;
+}
+
+a:visited {
+    color: whitesmoke;
+}
+
+.btn:hover 
+{
+    background-color: #808080;
+}
+
+.btn-login:hover {
+    background-color: #808080;
+}

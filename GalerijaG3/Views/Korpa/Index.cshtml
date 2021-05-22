@@ -1,0 +1,105 @@
+﻿@using GalerijaG3.Models
+@{
+    Layout = null;
+    ViewBag.Title = "Pregled slika za kupovinu";
+}
+
+<!DOCTYPE html>
+
+@{
+
+    <!-- INIT -->
+
+    Dictionary<string, Slika> korpa = (Dictionary<string, Slika>)HttpContext.Current.Session["korpa"];
+    Korisnik korisnik = (Korisnik)HttpContext.Current.Session["korisnik"];
+
+    <!-- INIT -->
+
+}
+
+<html>
+<head>
+    <link rel="stylesheet" href="~/Content/PrikazSlikaStyle.css">
+    <meta name="viewport" content="width=device-width" />
+</head>
+<body>
+
+    <!-- MENI -->
+
+    <ul>
+        <li><a href="~/Slike/Index">Home</a></li>
+        <li><a class="active" href="~/Korpa/Index">Korpa</a></li>
+        <li><a href="~/Login/Odjava">Odjava</a></li>
+    </ul>
+    <p class="korisnikPrikaz">
+        Kupac: @korisnik.ime @korisnik.prezime
+    </p>
+
+    <!-- MENI -->
+
+
+    <div class="app-title">
+        <h1>Pregled slika za kupovinu</h1>
+    </div>
+
+
+    <!-- GRESKE -->
+
+    @if (ViewBag.ErrorMessages != null && ViewBag.ErrorMessages.Count > 0)
+    {
+        foreach (string error in ViewBag.ErrorMessages)
+        {
+            <p style="color:darkred; text-align:center">
+                @error <br>
+            </p>
+        }
+    }
+    <br><br>
+
+    <!-- GRESKE -->
+
+    @{
+        if (korpa.Count != 0)
+        {
+            <table>
+                <tr>
+                    <th>Ime slike</th>
+                    <th>Cena slike</th>
+                </tr>
+                @{
+                    foreach (Slika s in korpa.Values)
+                    {
+                        <tr>
+                            <td>@s.naziv</td>
+                            <td>@s.cena,00 EUR</td>
+                        </tr>
+                    }
+                }
+                <tr>
+                    <td colspan=1 style="font-size:25px">
+                        <form action="IzvrsiKupovinu" method="post" class="login-form">
+                            <input type="submit" class="btn-login btn-primary btn-large btn-block" value="Kupi">
+                        </form>
+                    </td>
+                    <td colspan=1 style="font-size:25px">
+                        <b>Ukupna cena: @ViewBag.Cena,00 EUR</b>
+                    </td>
+                <tr/>
+            </table>
+        }
+        else
+        {
+
+            <!-- GRESKA -->
+
+            <p style="color:darkred; font-size:25px; text-align:center">
+                Korpa je prazna, molimo dodajte slike koje želite da kupite i pokušajte ponovo!
+            </p>
+
+            <!-- GRESKA -->
+
+        }
+    }
+
+</body>
+</html>

@@ -1,0 +1,68 @@
+﻿@using GalerijaG3.Models;
+@{
+    Layout = null;
+    ViewBag.Title = "Registracija korisnika";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <link rel="stylesheet" href="~/Content/RPStyle.css">
+    <meta name="viewport" content="width=device-width" />
+</head>
+<body>
+
+    <div class="app-title">
+        <h1>Registracija</h1>
+    </div>
+
+    <form action="~/Register/Registracija" method="post" class="login-form">
+        <table class="control-group">
+            <tr>
+                <td><input type="text" class="login-field" placeholder="Unesite vaše ime" name="ime" required></td>
+                <td><input type="text" class="login-field" placeholder="Unesite vaše prezime" name="prezime" required></td>
+            </tr>
+            <tr>
+                <td><input type="text" class="login-field" placeholder="Unesite vaše korisničko ime" name="korisnickoIme" required></td>
+                <td><input type="password" class="login-field" placeholder="Unesite vašu lozinku" name="lozinka" required></td>
+            </tr>
+            <tr>
+                <td>
+                    <input list="gender" name="pol" placeholder="Odaberite pol" required />
+                    <datalist id="gender">
+                        <option value="MUSKI"></option>
+                        <option value="ZENSKI"></option>
+                        <option value="DRUGO"></option>
+                    </datalist>
+                </td>
+                <td><input type="date" class="login-field" placeholder="Unesite vaš datum rođenja" name="datumRodjenja" required></td>
+            </tr>
+            <tr>
+                <td colspan="2"><input type="email" class="login-field-double" placeholder="Unesite vašu e-mail adresu" name="email" required></td>
+            </tr>
+            <tr>
+                <td colspan="2"><input type="submit" class="btn btn-primary btn-large btn-block" value="Potvrdi"></td>
+            </tr>
+        </table>
+    </form>
+
+    <br>
+
+    @if (ViewBag.ErrorMessages != null && ViewBag.ErrorMessages.Count > 0)
+    {
+        foreach (string error in ViewBag.ErrorMessages)
+        {
+            <p class="error">
+                @error <br>
+            </p>
+        }
+    }
+
+    <p class="bottom">
+        Već imate nalog, ulogujte se
+        <a href="~/Login/Index">ovde</a>!
+    </p>
+
+</body>
+</html>

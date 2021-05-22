@@ -1,0 +1,463 @@
+﻿@using GalerijaG3.Models
+@{
+    Layout = null;
+    ViewBag.Title = "Pregled galerija";
+}
+
+<!DOCTYPE html>
+
+@{
+
+    <!-- INIT -->
+
+    Dictionary<string, Slika> slike = (Dictionary<string, Slika>)HttpContext.Current.Application["slike"];
+    Dictionary<string, Korisnik> korisnici = (Dictionary<string, Korisnik>)HttpContext.Current.Application["korisnici"];
+    Dictionary<string, Galerija> galerije = (Dictionary<string, Galerija>)HttpContext.Current.Application["galerije"];
+    Korisnik korisnik = (Korisnik)HttpContext.Current.Session["korisnik"];
+
+    <!-- INIT -->
+
+}
+
+<html>
+<head>
+    <link rel="stylesheet" href="~/Content/PrikazSlikaStyle.css">
+    <meta name="viewport" content="width=device-width" />
+</head>
+<body>
+
+    @{
+        if (korisnik == null)
+        {
+            <ul>
+                <li><a class="active" href="~/Slike/Index">Home</a></li>
+                <li><a href="~/Login/Index">Prijava</a></li>
+                <li><a href="~/Register/Index">Registracija</a></li>
+            </ul>
+
+            <p class="korisnikPrikaz">
+                Neregistrovan korisnik
+            </p>
+        }
+        else if (korisnik != null && korisnik.uloga.Equals(Uloga.KUPAC))
+        {
+            <ul>
+                <li><a class="active" href="~/Slike/Index">Home</a></li>
+                <li><a href="~/Korpa/Index">Korpa</a></li>
+                <li><a href="~/Login/Odjava">Odjava</a></li>
+            </ul>
+            <p class="korisnikPrikaz">
+                Kupac: @korisnik.ime @korisnik.prezime
+            </p>
+        }
+        else if (korisnik != null && korisnik.uloga.Equals(Uloga.ADMINISTRATOR))
+        {
+            <ul>
+                <li><a class="active" href="~/Slike/Index">Home</a></li>
+                <li><a href="~/Login/Odjava">Odjava</a></li>
+            </ul>
+            <p class="korisnikPrikaz">
+                Administrator: @korisnik.ime @korisnik.prezime
+            </p>
+        }
+    }
+
+    @{
+        if (korisnik == null)
+        {
+            <div class="app-title">
+                <h1>Pregled slika</h1>
+            </div>
+        }
+        else if (korisnik != null && korisnik.uloga.Equals(Uloga.KUPAC))
+        {
+            <div class="app-title">
+                <h1>Kupovina slike</h1>
+            </div>
+        }
+        else if (korisnik != null && korisnik.uloga.Equals(Uloga.ADMINISTRATOR))
+        {
+            <div class="app-title">
+                <h1>Kontrolni panel</h1>
+            </div>
+        }
+    }
+
+    <!-- GRESKE -->
+
+    @if (ViewBag.ErrorMessages != null && ViewBag.ErrorMessages.Count > 0)
+    {
+        foreach (string error in ViewBag.ErrorMessages)
+        {
+            <p style="color:darkred; text-align:center">
+                @error <br>
+            </p>
+        }
+    }
+    <br><br>
+
+    <!-- GRESKE -->
+    <!-- NEREGISTROVAN KORISNIK -->
+
+    @if (korisnik == null)
+    {
+        <table>
+            <tr>
+                <th>Naziv slike</th>
+                <th>Autor slike</th>
+                <th>Godina izrade</th>
+                <th>Kratak opis</th>
+                <th>Tehnika</th>
+                <th>Cena</th>
+                <th>Galerija</th>
+            </tr>
+            @{
+                foreach (Slika s in slike.Values)
+                {
+                    if (s.naProdaju && !s.obrisana)
+                    {
+                        <tr>
+                            <td>@s.naziv</td>
+                            <td>@s.autor</td>
+                            <td>@s.godinaIzrade god.</td>
+                            <td>@s.opis</td>
+                            <td>@s.tehnika</td>
+                            <td>@s.cena,00 EUR</td>
+                            <td>@s.galerija</td>
+                        </tr>
+                    }
+                }
+            }
+            <tr>
+                <td colspan="1">
+                    <form action="~/Slike/Sortiranje" method="post">
+                        <input list="field" name="polje" placeholder="Odaberite kolonu za sortiranje" required />
+                        <datalist id="field">
+                            <option value="Naziv slike"></option>
+                            <option value="Tehnika"></option>
+                            <option value="Cena"></option>
+                        </datalist><br>
+                        <input list="sort" name="vrsta" placeholder="Odaberite vrstu" required />
+                        <datalist id="sort">
+                            <option value="Rastuće"></option>
+                            <option value="Opadajuće"></option>
+                        </datalist>
+                        <input type="submit" class="btn-login" value="Sortiraj">
+                    </form>
+                </td>
+                <td colspan="4">
+                    <form action="~/Slike/PretragaCene" method="post">
+                        <input type="number" placeholder="Unesite početnu cenu" name="cenaOd"><br>
+                        <input type="number" placeholder="Unesite kranju cenu" name="cenaDo">
+                        <input type="submit" class="btn-login" value="Pretraži">
+                    </form>
+                </td>
+                <td colspan="2">
+                    <form action="~/Slike/PretragaNaziva" method="post">
+                        <input list="fieldPretraga" name="poljePretrage" placeholder="Odaberite kolonu za pretragu" />
+                        <datalist id="fieldPretraga">
+                            <option value="Naziv slike"></option>
+                            <option value="Tehnika"></option>
+                        </datalist><br>
+                        <input type="text" placeholder="Unesite ime ili tehniku" name="nazivPretrage">
+                        <input type="submit" class="btn-login" value="Pretraži">
+                    </form>
+                </td>
+            </tr>
+        </table>
+    }
+
+    <!-- NEREGISTROVAN KORISNIK -->
+
+    <!-- ADMINISTRATOR -->
+
+    @if (korisnik != null && korisnik.uloga.Equals(Uloga.ADMINISTRATOR))
+    {
+
+        <!-- KORISNICI -->
+
+        <table>
+            <tr>
+                <th>Korisničko ime</th>
+                <th>Ime korisnika</th>
+                <th>Prezime korisnika</th>
+                <th>Pol</th>
+                <th>Email</th>
+                <th>Datum rođenja</th>
+                <th>Obrisan</th>
+                <th colspan="2">Upravljanje</th>
+            </tr>
+            @{
+                foreach (Korisnik k in korisnici.Values)
+                {
+                    if (k.uloga.Equals(Uloga.KUPAC))
+                    {
+                        <tr>
+                            <td>@k.korisnickoIme</td>
+                            <td>@k.ime</td>
+                            <td>@k.prezime</td>
+                            <td>@k.pol</td>
+                            <td>@k.email</td>
+                            <td>@k.datumRodjenja.ToString("dd/MM/yyyy")</td>
+                            <td>@k.obrisan</td>
+                            <td>
+                                <form action="~/Slike/DeaktivirajKorisnika" method="post">
+                                    <input type="text" name="korisnickoIme" value="@k.korisnickoIme" hidden>
+                                    <input type="submit" class="obrisiDugme" value="Deaktiviraj">
+                                </form>
+                            </td>
+                            <td>
+                                <form action="~/Slike/AktivirajKorisnika" method="post">
+                                    <input type="text" name="korisnickoIme" value="@k.korisnickoIme" hidden>
+                                    <input type="submit" class="obrisiDugme" value="Aktiviraj">
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                }
+            }
+        </table>
+
+        <!-- KORISNICI -->
+
+        <br><br>
+
+        <!-- SLIKE -->
+
+        <table>
+            <tr>
+                <th>Naziv slike</th>
+                <th>Autor slike</th>
+                <th>Godina izrade</th>
+                <th>Kratak opis</th>
+                <th>Tehnika</th>
+                <th>Na prodaju</th>
+                <th>Galerija</th>
+            </tr>
+            @{
+                foreach (Slika s in slike.Values)
+                {
+                    if (!s.obrisana)
+                    {
+                        <tr>
+                            <td>@s.naziv</td>
+                            <td>@s.autor</td>
+                            <td>@s.godinaIzrade god.</td>
+                            <td>@s.opis</td>
+                            <td>@s.tehnika</td>
+                            <td>@s.naProdaju -> @s.cena,00 EUR</td>
+                            <td>@s.galerija</td>
+                        </tr>
+                    }
+                }
+            }
+            <tr>
+                <td colspan="2">
+                    <form action="~/Slike/Sortiranje" method="post">
+                        <input list="field" name="polje" placeholder="Odaberite kolonu za sortiranje" required />
+                        <datalist id="field">
+                            <option value="Naziv slike"></option>
+                            <option value="Tehnika"></option>
+                            <option value="Cena"></option>
+                        </datalist><br>
+                        <input list="sort" name="vrsta" placeholder="Odaberite vrstu" required />
+                        <datalist id="sort">
+                            <option value="Rastuće"></option>
+                            <option value="Opadajuće"></option>
+                        </datalist>
+                        <input type="submit" class="btn-login" value="Sortiraj">
+                    </form>
+                </td>
+                <td colspan="3">
+                    <form action="~/Slike/PretragaCene" method="post">
+                        <input type="number" placeholder="Unesite početnu cenu" name="cenaOd"><br>
+                        <input type="number" placeholder="Unesite kranju cenu" name="cenaDo">
+                        <input type="submit" class="btn-login" value="Pretraži">
+                    </form>
+                </td>
+                <td colspan="2">
+                    <form action="~/Slike/PretragaNaziva" method="post">
+                        <input list="fieldPretraga" name="poljePretrage" placeholder="Odaberite kolonu za pretragu" />
+                        <datalist id="fieldPretraga">
+                            <option value="Naziv slike"></option>
+                            <option value="Tehnika"></option>
+                        </datalist><br>
+                        <input type="text" placeholder="Unesite ime ili tehniku" name="nazivPretrage">
+                        <input type="submit" class="btn-login" value="Pretraži">
+                    </form>
+                </td>
+            </tr>
+            <tr>
+                <td colspan=7>
+                    <form action="~/Slike/PrebacivanjeSlika" method="post">
+                        <input type="submit" class="btn-login" value="Dodaj sliku">
+                    </form>
+                    <form action="~/Slike/PrebacivanjeIzmenaSlika" method="post">
+                        <input type="submit" class="btn-login" value="Izmeni">
+                    </form>
+                </td>
+            </tr>
+        </table>
+
+        <!-- SLIKE -->
+
+        <br><br>
+
+        <!-- GALERIJE -->
+
+        <table>
+            <tr>
+                <th>Naziv galerije</th>
+                <th>Lokacija galerije</th>
+                <th>Upravljanje</th>
+            </tr>
+            @{
+                foreach (Galerija g in galerije.Values)
+                {
+                    if (g.obrisana != true)
+                    {
+                        <tr>
+                            <td>@g.naziv</td>
+                            <td>@g.adresa</td>
+                            <td>
+                                <form action="~/Slike/ObrisiGaleriju" method="post">
+                                    <input type="text" name="nazivGalerije" value="@g.naziv" hidden><br>
+                                    <input type="submit" class="obrisiGaleriju" value="Obriši">
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                }
+            }
+            <tr>
+                <td colspan="3">
+                    <form action="~/Slike/DodajGaleriju" method="post">
+                        <input type="text" placeholder="Unesite naziv galerije" name="nazivGalerije"><br>
+                        <input type="text" placeholder="Unesite lokaciju galerije" name="lokacijaGalerije">
+                        <input type="submit" class="btn-login" value="Dodaj galeriju">
+                    </form>
+                </td>
+            </tr>
+        </table>
+
+        <!-- GALERIJE -->
+    }
+
+    <!-- ADMINISTRATOR -->
+
+    <!-- KUPAC -->
+
+    @if (korisnik != null && korisnik.uloga.Equals(Uloga.KUPAC))
+    {
+
+        <!-- SLIKE -->
+
+        <table>
+            <tr>
+                <th>Naziv slike</th>
+                <th>Autor slike</th>
+                <th>Godina izrade</th>
+                <th>Kratak opis</th>
+                <th>Tehnika</th>
+                <th>Na prodaju</th>
+                <th>Kupovina</th>
+            </tr>
+            @{
+                foreach (Slika s in slike.Values)
+                {
+                    if (!s.obrisana && s.naProdaju)
+                    {
+                        <tr>
+                            <td>@s.naziv</td>
+                            <td>@s.autor</td>
+                            <td>@s.godinaIzrade god.</td>
+                            <td>@s.opis</td>
+                            <td>@s.tehnika</td>
+                            <td>@s.cena,00 EUR</td>
+                            <td>
+                                <form action="~/Korpa/Dodaj" method="post">
+                                    <input type="text" name="nazivSlike" value="@s.naziv" hidden>
+                                    <input type="submit" class="btn-login" value="Dodaj u korpu">
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                }
+            }
+            <tr>
+                <td colspan="2">
+                    <form action="~/Slike/Sortiranje" method="post">
+                        <input list="field" name="polje" placeholder="Odaberite kolonu za sortiranje" required />
+                        <datalist id="field">
+                            <option value="Naziv slike"></option>
+                            <option value="Tehnika"></option>
+                            <option value="Cena"></option>
+                        </datalist><br>
+                        <input list="sort" name="vrsta" placeholder="Odaberite vrstu" required />
+                        <datalist id="sort">
+                            <option value="Rastuće"></option>
+                            <option value="Opadajuće"></option>
+                        </datalist>
+                        <input type="submit" class="btn-login" value="Sortiraj">
+                    </form>
+                </td>
+                <td colspan="3">
+                    <form action="~/Slike/PretragaCene" method="post">
+                        <input type="number" placeholder="Unesite početnu cenu" name="cenaOd"><br>
+                        <input type="number" placeholder="Unesite kranju cenu" name="cenaDo">
+                        <input type="submit" class="btn-login" value="Pretraži">
+                    </form>
+                </td>
+                <td colspan="2">
+                    <form action="~/Slike/PretragaNaziva" method="post">
+                        <input list="fieldPretraga" name="poljePretrage" placeholder="Odaberite kolonu za pretragu" />
+                        <datalist id="fieldPretraga">
+                            <option value="Naziv slike"></option>
+                            <option value="Tehnika"></option>
+                        </datalist><br>
+                        <input type="text" placeholder="Unesite ime ili tehniku" name="nazivPretrage">
+                        <input type="submit" class="btn-login" value="Pretraži">
+                    </form>
+                </td>
+            </tr>
+        </table>
+
+        <!-- SLIKE -->
+
+        <br><br>
+
+        <!-- GALERIJE -->
+
+        <table>
+            <tr>
+                <th>Naziv galerije</th>
+                <th>Lokacija galerije</th>
+                <th>Dostupne slike</th>
+            </tr>
+            @{
+                foreach (Galerija g in galerije.Values)
+                {
+                    if (g.obrisana != true)
+                    {
+                        <tr>
+                            <td>@g.naziv</td>
+                            <td>@g.adresa</td>
+                            <td>
+                                <form action="~/Galerija/Index" method="post">
+                                    <input type="text" name="nazivGalerije" value="@g.naziv" hidden>
+                                    <input type="submit" class="btn-login" value="Prikaži">
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                }
+            }
+        </table>
+
+        <!-- GALERIJE -->
+    }
+
+    <!-- KUPAC -->
+
+</body>
+</html>

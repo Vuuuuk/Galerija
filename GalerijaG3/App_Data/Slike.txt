@@ -1,0 +1,5 @@
+﻿Mona Lisa;Leonardo da Vinci;1505;Tempere;Zagonetan osmeh;100000000;true;false;Luvr
+Poslednja večera;Leonardo da Vinci;1495;Tempere;Ogromna slika;10000;true;false;Akropolj
+Zvezdana noć;Vincent Van Gogh;1889;Vodene boje;Pogled iz ludnice;150000;true;false;Ermitaž
+Vrisak;Edvard Munch;1893;Vostane boje;Preopterecenje cula;250000;true;false;Luvr
+Guernica;Pablo Picasso;1937;Ulje na platnu;Rat;450000;false;false;Luvr
